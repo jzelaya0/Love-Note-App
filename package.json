@@ -1,0 +1,20 @@
+{
+  "name": "love-note",
+  "version": "1.0.0",
+  "description": "App to send messages and save notes",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jzelaya0/Love-Note-App.git"
+  },
+  "author": "Jesse Zelaya",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jzelaya0/Love-Note-App/issues"
+  },
+  "homepage": "https://github.com/jzelaya0/Love-Note-App#readme"
+}
