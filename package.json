@@ -16,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/jzelaya0/Love-Note-App/issues"
   },
-  "homepage": "https://github.com/jzelaya0/Love-Note-App#readme"
+  "homepage": "https://github.com/jzelaya0/Love-Note-App#readme",
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "express": "^4.13.3",
+    "mongoose": "^4.3.3",
+    "morgan": "^1.6.1"
+  }
 }
