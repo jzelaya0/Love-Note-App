@@ -17,7 +17,7 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Could not establish database connection'));
 db.once('open', function(){
   console.log("Successufl database connection");
-})
+});
 
 
 // CONFIGURATION
@@ -25,6 +25,14 @@ db.once('open', function(){
 //Use Body Parser to grab info from POST requests
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+
+//Configuration for CORS requests
+app.use(function(req,res,next){
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
+  next();
+});
 
 
 // Log all API requests to the console
