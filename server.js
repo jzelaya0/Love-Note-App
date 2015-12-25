@@ -38,6 +38,9 @@ app.use(function(req,res,next){
 // Log all API requests to the console
 app.use(morgan('dev'));
 
+// Use static file assests for from Front End
+app.use(express.static(__dirname + '/public'));
+
 
 // START SERVER
 // ==================================================
