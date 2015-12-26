@@ -15,6 +15,33 @@ var UserSchema = new Schema({
 });
 
 
+// PASWORD HASH
+// ==================================================
+UserSchema.pre('save', function(next){
+  var user = this;
+
+  // If password hasn't changed or isn't new - Then hash password
+  if(!user.isModified('password')) return next();
+
+  //Make it Salty!
+  bcrypt.hash(user.password,null, null, function(err,hash){
+    if(err) return next(err);
+
+    //Change the password to the hashed version
+    user.password = hash;
+    next();
+  });
+});
+
+
+//Method to compare user's inputted password with hashed password in database
+UserSchema.methods.comparePassword = function(password){
+  var user = this;
+
+  return bcrypt.compareSync(password,user.password);
+};
+
+
 // Create a user model from Schema
 var User = mongoose.model('User', UserSchema);
 //Export the user model
