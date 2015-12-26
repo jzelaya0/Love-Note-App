@@ -16,7 +16,7 @@ mongoose.connect(config.database);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Could not establish database connection'));
 db.once('open', function(){
-  console.log("Successufl database connection");
+  console.log("Successful database connection");
 });
 
 
@@ -41,6 +41,12 @@ app.use(morgan('dev'));
 // Use static file assests for from Front End
 app.use(express.static(__dirname + '/public'));
 
+
+// ROUTES
+// ==================================================
+var apiRoutes = require('./app/routes/api')(app,express);
+// prefix "/api" to the API routes
+app.use('/api', apiRoutes);
 
 // START SERVER
 // ==================================================
