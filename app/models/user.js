@@ -7,8 +7,8 @@ var bcrypt   = require('bcrypt-nodejs');
 
 // USER SCHEMA
 // ==================================================
-var UserSchmea = new Schema({
-  name: string,
+var UserSchema = new Schema({
+  name: String,
   username: {type: String, requried: true, index: {unique: true}},//Prevent duplicate user names
   email: {type: String, requried: true, index: {unique: true}},//Prevent duplicate email addresses
   password: {type: String, required: true, select: false}//Prevent returning password on queries
