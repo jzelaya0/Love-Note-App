@@ -66,7 +66,7 @@ module.exports = function(app,express){
           //Respond with all users
           res.json(users);
         });
-      })//end get all users
+      });//end get all users
 
   //GET - single user by id at /api/users/:user_id
   apiRouter.route('/users/:user_id')
@@ -78,6 +78,29 @@ module.exports = function(app,express){
           res.json(user);
         });
       })//end get single user
+
+  //UPDATE - single user by id at /api/users/:user_id
+      .put(function(req,res){
+        User.findById(req.params.user_id, function(err,user){
+          //Send errors if any
+          if(err) res.send(err);
+
+          //Update user's info only if it is new
+          if(req.body.name) user.name = req.body.name;
+          if(req.body.username) user.username = req.body.username;
+          if(req.body.email) user.email = req.body.email;
+          if(req.body.password) user.password = req.body.password;
+
+          //Save the user's new info
+          user.save(function(err){
+            //Send errors if any
+            if(err) res.send(err);
+
+            //Respon with a successful message
+            res.json({message: "User successfully updated!"});
+          });//end user save
+        });//end user query
+      });//end update single user
 
   return apiRouter;
 };//End module exports
