@@ -4,6 +4,7 @@
 var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
 var bcrypt   = require('bcrypt-nodejs');
+var uniqueValidator = require('mongoose-unique-validator');
 
 // USER SCHEMA
 // ==================================================
@@ -41,6 +42,8 @@ UserSchema.methods.comparePassword = function(password){
   return bcrypt.compareSync(password,user.password);
 };
 
+
+UserSchema.plugin(uniqueValidator);
 
 // Create a user model from Schema
 var User = mongoose.model('User', UserSchema);
