@@ -57,20 +57,27 @@ module.exports = function(app,express){
 
   // API USER ROUTES
   // ==================================================
-  // Routes ending in - /users
+  //GET - all users at /api/users
   apiRouter.route('/users')
-      //GET - all users at /api/users
       .get(function(req,res){
         User.find(function(err,users){
           //Send errors if any
-          if(err)
-            res.send(err);
+          if(err) res.send(err);
           //Respond with all users
           res.json(users);
         });
       })//end get all users
 
-      
+  //GET - single user by id at /api/users/:user_id
+  apiRouter.route('/users/:user_id')
+      .get(function(req,res){
+        User.findById(req.params.user_id, function(err,user){
+          //Send errors if any
+          if(err) res.send(err);
+          //Respond with user
+          res.json(user);
+        });
+      })//end get single user
 
   return apiRouter;
 };//End module exports
