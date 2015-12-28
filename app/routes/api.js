@@ -95,12 +95,21 @@ module.exports = function(app,express){
           user.save(function(err){
             //Send errors if any
             if(err) res.send(err);
-
-            //Respon with a successful message
+            //Respond with a successful message
             res.json({message: "User successfully updated!"});
           });//end user save
         });//end user query
-      });//end update single user
+      })//end update single user
+
+  //DELETE - single user by id at /api/users/:user_id
+      .delete(function(req,res){
+        User.remove({_id: req.params.user_id}, function(err,user){
+          //Send errors if any
+          if(err) res.send(err);
+          //Respond with a successful message
+          res.json({message: 'Successfully deleted user!'});
+        });
+      });
 
   return apiRouter;
 };//End module exports
