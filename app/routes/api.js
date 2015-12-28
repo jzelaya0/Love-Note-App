@@ -22,15 +22,19 @@ module.exports = function(app,express){
 
     //Save the new user and check for errors
     user.save(function(err){
-     if(err){
-       //A duplicate username or password was inputted
-       if(err.code == 11000){
-         return res.json({success: false, message: 'A user with that username or email exists'});
-       }else {
-         return res.send(err);
-       }
-     }
-     res.json({message: 'User successfully created!'});
+      if(err){
+        //Check for either duplicate usernames or email addresses
+        if(err.errors.username !== null || err.errors.email !== null){
+          var username = err.errors.username;
+          var email = err.errors.email;
+          //Respond with username or email error message
+          return res.send({
+            username_Error: username,
+            email_Error: email
+          });
+        }
+      }
+    res.json({message: 'Alright! User was created!'});
    });//End save
   });
 
