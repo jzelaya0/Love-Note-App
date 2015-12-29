@@ -81,19 +81,44 @@ module.exports = function(app,express){
 
 
 
-  // MIDDLEWARE
+  // TOKEN MIDDLEWARE
   // ==================================================
   apiRouter.use(function(req,res,next){
-    console.log('A visitor has arrived');
+    //Check POST params OR URL params OR HEADER for token
+    var token = req.body.token || req.query.token || req.headers['x-access-token'];
 
-    next();
-  });
+    //Decode the token
+    if(token){
+      //Verifiy secret and check expiration
+      jwt.verify(token, superSecret, function(err, decoded){
+        if(err){
+          res.status(403).send({success: false, message: 'Failed to authenticate token.'});
+        }else {
+          //If token checks out - Save request to be used in other routes
+          req.decoded = decoded;
+          //GET USER INFO HERE
+          User.findOne({email: decoded.email}, function(err,user){
+            req.user = user;
+            //Move on to the next route
+            next();
+          });
+        }
+      });//end jwt
+    }else {
+      //If no token is provided - Return HTTP 403(access forbidden) response and error message
+      res.status(403).send({success: false, message: 'No token provided.'});
+    }
+
+  });//end middleware
+
+
 
   // TEST ROUTE
   // =========================
   apiRouter.get('/', function(req,res){
     res.json({message:'Welcome to the Love Note API!'});
   });
+
 
 
   // API USER ROUTES
