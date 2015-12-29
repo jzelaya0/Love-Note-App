@@ -1,11 +1,52 @@
 // app/routes/api.js
 var bodyParser = require('body-parser');
 var User       = require('../models/user');
+var jwt        = require('jsonwebtoken');
+var config     = require('../../config');
 
+//Scret to create tokens
+var superSecret = config.secret;
 
 module.exports = function(app,express){
   //Create new instance of Express router
   var apiRouter = express.Router();
+
+  // API AUTHENTICATE
+  // ==================================================
+  //Authenticate a user at /api/authenticate
+  apiRouter.post('/authenticate', function(req,res){
+    User.findOne({email: req.body.email})
+      .select('name username email password')
+      .exec(function(err, user){
+        //Throw error if any
+        if(err) throw err;
+
+        //If no user with that username was found
+        if(!user){
+          res.json({success: false, message: 'Authentication Failed: Username not found.'});
+        }else if(user){
+          //Check for password match
+          var validPassword = user.comparePassword(req.body.password);
+          if(!validPassword){
+            res.json({success: false, message: 'Authentication Failed: Wrong password.'});
+          }else {
+            //If valid password
+            var token = jwt.sign({
+              username: user.username},
+              superSecret,
+              {expiresInMinutes: 1440});//Expires in 24 hours
+
+            //Return the info and token as json
+            res.json({
+              success: true,
+              message: "Here is your token!",
+              token: token
+            });//end json response
+          }
+        }
+      });//end find one
+  });//end authenticate
+
 
   // API USER - CREATE A NEW USER
   // ==================================================
@@ -109,7 +150,7 @@ module.exports = function(app,express){
           //Respond with a successful message
           res.json({message: 'Successfully deleted user!'});
         });
-      });
+      });//end delete single user
 
   return apiRouter;
 };//End module exports
