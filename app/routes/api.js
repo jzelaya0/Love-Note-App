@@ -1,6 +1,7 @@
 // app/routes/api.js
 var bodyParser = require('body-parser');
 var User       = require('../models/user');
+var Note       = require('../models/note');
 var jwt        = require('jsonwebtoken');
 var config     = require('../../config');
 
@@ -32,7 +33,9 @@ module.exports = function(app,express){
           }else {
             //If valid password
             var token = jwt.sign({
-              username: user.username},
+              name: user.name,
+              username: user.username,
+              email: user.email },
               superSecret,
               {expiresInMinutes: 1440});//Expires in 24 hours
 
@@ -119,6 +122,12 @@ module.exports = function(app,express){
     res.json({message:'Welcome to the Love Note API!'});
   });
 
+  // API ENDPOINT TO GET USER INFO
+  // =========================
+  apiRouter.get('/me', function(req, res){
+    res.send(req.decoded);
+  });
+
 
 
   // API USER ROUTES
@@ -176,6 +185,99 @@ module.exports = function(app,express){
           res.json({message: 'Successfully deleted user!'});
         });
       });//end delete single user
+
+
+  // API Note ROUTES
+  // ==================================================
+  apiRouter.route('/notes_all')
+
+  //GET - ALL notes from all users at /api/notes_all
+      .get(function(req,res){
+        Note.find(function(err,notes){
+          //Send errors if any
+          if(err) res.send(err);
+          //Respond will all notes
+          res.json(notes);
+        });
+      });//end get all notes
+
+  apiRouter.route('/notes')
+
+  //GET - all notes from single user at /api/notes
+      .get(function(req,res){
+        Note.find({user_id: req.user._id}, function(err,note){
+          //Send errors if any
+          if(err) res.send(err);
+          //Respond with note
+          res.json(note);
+        });
+      })//end get all notes from single user
+
+  //POST - post a new note at /api/notes
+      .post(function(req,res){
+        // Create a new note instance from the Note Model
+        var note = new Note();
+
+        //Set note information
+        note.title    = req.body.title;
+        note.body     = req.body.body;
+        note.category = req.body.category;
+        note.user_id  = req.user._id;
+
+
+        //Save the note and check for errors
+        note.save(function(err){
+          //Send errors if any
+          if(err) res.send(err);
+          //Send success message
+          console.log(note.user_id);
+          res.json({message: 'Note successfully created!'});
+        });
+
+      });//end post a new note
+
+  apiRouter.route('/notes/:note_id')
+
+  //GET - single note from a user /api/notes/:note_id
+      .get(function(req,res){
+        Note.find({user_id: req.user._id, _id:req.params.note_id}, function(err,note){
+          //Send errors if any
+          if(err) res.send(err);
+          //Respond with single note
+          res.json(note);
+        });
+      })//end get single note
+
+  //UPDATE - single note from a user /api/notes/:note_id
+      .put(function(req,res){
+        Note.findById(req.params.note_id, function(err, note){
+          //Send errors if any
+          if(err) res.send(err);
+
+          //Save only if information is new
+          if(req.body.title) note.title = req.body.title;
+          if(req.body.body) note.body = req.body.body;
+          if(req.body.category) note.category = req.body.category;
+
+          //Save the note
+          note.save(function(err){
+            //Send errors if any
+            if(err) res.send(err);
+            //Respond with message
+            res.json({message: "Update successful!"});
+          });//end save
+        });//end find
+      })//end update a single note
+
+  //DELETE - single note from a user /api/notes/:note_id
+      .delete(function(req,res){
+        Note.remove({user_id: req.user._id, _id: req.params.note_id}, function(err,note){
+          //Send errors if any
+          if(err) res.send(err);
+          //Respond with a message
+          res.json({message: "Note deleted!"})
+        });//end remove note
+      });//end delete note from a user
 
   return apiRouter;
 };//End module exports
