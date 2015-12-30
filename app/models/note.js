@@ -11,7 +11,7 @@ var NoteSchema = new Schema({
   body: String,
   category: String,
   date_created: {type: Date, default: Date.now},
-  created_by: {type: Schema.ObjectId, ref: 'User'}//Reference note's creator
+  user_id: {type: Schema.ObjectId, ref: 'User'}//Reference note's creator
 });
 
 
