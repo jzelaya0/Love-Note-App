@@ -48,6 +48,12 @@ var apiRoutes = require('./app/routes/api')(app,express);
 // prefix "/api" to the API routes
 app.use('/api', apiRoutes);
 
+// CATCHALL ROUTE
+// SEND USERS TO FRONT END
+app.get('*', function (req, res){
+  res.sendFile(path.join(__dirname + 'public/app/views/index.html'))
+})
+
 // START SERVER
 // ==================================================
 app.listen(config.port);
