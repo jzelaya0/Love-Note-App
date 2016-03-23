@@ -6,6 +6,7 @@ var mongoose   = require('mongoose');//Use with Mongo Database
 var morgan     = require('morgan');//Log all requests to the console
 var bodyParser = require('body-parser');//Grab info from POST requests
 var config     = require('./config');
+var path       = require('path');
 
 
 // DATABASE CONNECTION
@@ -50,9 +51,9 @@ app.use('/api', apiRoutes);
 
 // CATCHALL ROUTE
 // SEND USERS TO FRONT END
-app.get('*', function (req, res){
-  res.sendFile(path.join(__dirname + 'public/app/views/index.html'))
-})
+app.get('*', function(req, res) {
+	res.sendFile(path.join(__dirname + '/public/app/views/index.html'));
+});
 
 // START SERVER
 // ==================================================
