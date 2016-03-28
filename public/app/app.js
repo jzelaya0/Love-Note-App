@@ -1,1 +1,1 @@
-angular.module("loveNote",[]).controller("mainCtrl",function(){console.log("howdy");var o=this;o.helloWorld=function(){console.log("hola mundo!")}});
+angular.module("loveNote",["mainCtrl"]);
