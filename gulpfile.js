@@ -10,7 +10,7 @@ var stylus     = require('gulp-stylus');
 var output = {
   angularApp : "public/app",
   angularControllers : "public/app/controllers/",
-  cssBuild : "public/app/assets/css"
+  cssBuild : "public/assets/css"
 };
 
 
