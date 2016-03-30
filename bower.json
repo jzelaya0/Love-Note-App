@@ -1,0 +1,21 @@
+{
+  "name": "love-note",
+  "version": "0.0.0",
+  "homepage": "https://github.com/jzelaya0/Love-Note-App",
+  "authors": [
+    "Jesse Zelaya <jessezelaya1@gmail.com>"
+  ],
+  "main": "index.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/assets/libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.6"
+  }
+}
