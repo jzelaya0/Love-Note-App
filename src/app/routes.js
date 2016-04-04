@@ -1,4 +1,14 @@
-//angular routes
+// src/app/routes.js
+angular.module("appRoutes", ["ngRoute"])
 
+  .config(function($routeProvider, $locationProvider){
 
-angular.module("appRoutes", [])
+      $routeProvider
+      //Home page route
+      .when('/', {
+        templateUrl: 'app/views/templates/home.html'
+      });
+
+      $locationProvider.html5Mode(true);
+
+  });
