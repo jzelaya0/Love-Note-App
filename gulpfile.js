@@ -11,6 +11,7 @@ var rename     = require('gulp-rename');
 var output = {
   angularApp : "public/app",
   angularControllers : "public/app/controllers/",
+  angularServices: "public/app/services",
   cssBuild : "public/assets/css"
 };
 
@@ -44,6 +45,17 @@ gulp.task('angularControllers', function(){
     .pipe(gulp.dest(output.angularControllers));
 });
 
+//Angular services
+gulp.task('angularServices', function(){
+  return gulp.src('src/app/services/*.js')
+    .pipe(jshint())
+    .pipe(jshint.reporter())
+    .pipe(ngAnnotate())
+    .pipe(concat('services.min.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest(output.angularServices));
+});
+
 // Stylus Task
 gulp.task('stylusBuild', function(){
   return gulp.src('src/assets/styles/main.styl')
@@ -58,5 +70,6 @@ gulp.task('stylusBuild', function(){
 gulp.task('watch', function(){
   gulp.watch('src/app/*.js', ["angularApp"]);
   gulp.watch('src/app/controllers/*js', ["angularControllers"]);
+  gulp.watch('src/app/services/*js', ["angularServices"]);
   gulp.watch('src/assets/styles/*.styl', ['stylusBuild']);
 });
