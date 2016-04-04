@@ -4,7 +4,7 @@ var ngAnnotate = require('gulp-ng-annotate');
 var concat     = require('gulp-concat');
 var jshint     = require('gulp-jshint');
 var stylus     = require('gulp-stylus');
-var rename     = require('gulp-rename')
+var rename     = require('gulp-rename');
 
 // PATHS
 // ====================================
@@ -22,11 +22,13 @@ gulp.task('default', ['watch']);
 
 // Main Angluar app
 gulp.task('angularApp', function(){
-  return gulp.src('src/app/app.js')
+  return gulp.src('src/app/*js')
     .pipe(jshint())
     .pipe(jshint.reporter())
     .pipe(ngAnnotate())
-    .pipe(rename('app.min.js'))
+    .pipe(rename({
+      suffix: '.min'
+    }))
     .pipe(uglify())
     .pipe(gulp.dest(output.angularApp));
 });
@@ -54,7 +56,7 @@ gulp.task('stylusBuild', function(){
 
 // Watch all tasks
 gulp.task('watch', function(){
-  gulp.watch('src/app/app.js', ["angularApp"]);
+  gulp.watch('src/app/*.js', ["angularApp"]);
   gulp.watch('src/app/controllers/*js', ["angularControllers"]);
   gulp.watch('src/assets/styles/*.styl', ['stylusBuild']);
 });
