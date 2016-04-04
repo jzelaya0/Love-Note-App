@@ -1,0 +1,1 @@
+angular.moudle('authService', []);
