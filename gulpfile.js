@@ -56,6 +56,12 @@ gulp.task('angularServices', function(){
     .pipe(gulp.dest(output.angularServices));
 });
 
+// Angular views
+gulp.task('angularViews', function(){
+  return gulp.src('src/app/views/*html')
+    .pipe(gulp.dest('public/app/views/templates'));
+});
+
 // Stylus Task
 gulp.task('stylusBuild', function(){
   return gulp.src('src/assets/styles/main.styl')
@@ -71,5 +77,6 @@ gulp.task('watch', function(){
   gulp.watch('src/app/*.js', ["angularApp"]);
   gulp.watch('src/app/controllers/*js', ["angularControllers"]);
   gulp.watch('src/app/services/*js', ["angularServices"]);
+  gulp.watch('src/app/views/*html', ["angularViews"]);
   gulp.watch('src/assets/styles/*.styl', ['stylusBuild']);
 });
