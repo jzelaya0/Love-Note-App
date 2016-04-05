@@ -6,6 +6,8 @@ var jshint     = require('gulp-jshint');
 var stylus     = require('gulp-stylus');
 var rename     = require('gulp-rename');
 var nodemon    = require('gulp-nodemon');
+var notify     = require('gulp-notify');
+var plubmer    = require('gulp-plumber');
 
 // PATHS
 // ====================================
@@ -66,6 +68,7 @@ gulp.task('angularViews', function(){
 // Stylus Task
 gulp.task('stylusBuild', function(){
   return gulp.src('src/assets/styles/main.styl')
+    .pipe(plubmer({errorHandler: notify.onError("Error: <%= error.message %>")}))
     .pipe(stylus({
       compress: true
     }))
