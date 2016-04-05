@@ -5,6 +5,7 @@ var concat     = require('gulp-concat');
 var jshint     = require('gulp-jshint');
 var stylus     = require('gulp-stylus');
 var rename     = require('gulp-rename');
+var nodemon    = require('gulp-nodemon');
 
 // PATHS
 // ====================================
@@ -18,7 +19,7 @@ var output = {
 
 // DEFAULT TASK
 // ====================================
-gulp.task('default', ['watch']);
+gulp.task('default', ['nodemon']);
 
 
 // Main Angluar app
@@ -79,4 +80,19 @@ gulp.task('watch', function(){
   gulp.watch('src/app/services/*js', ["angularServices"]);
   gulp.watch('src/app/views/*html', ["angularViews"]);
   gulp.watch('src/assets/styles/*.styl', ['stylusBuild']);
+});
+
+
+// Start nodemon server
+
+gulp.task('nodemon', function(){
+  nodemon({
+    script: 'server.js',
+    ext: 'js styl html'
+  })
+    .on('start', ['watch'])
+    .on('change', ['watch'])
+    .on('restart', function(){
+      console.log('Server has restarted!');
+    });
 });
