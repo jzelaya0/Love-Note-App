@@ -7,14 +7,12 @@ var stylus     = require('gulp-stylus');
 var rename     = require('gulp-rename');
 var nodemon    = require('gulp-nodemon');
 var notify     = require('gulp-notify');
-var plubmer    = require('gulp-plumber');
+var plumber    = require('gulp-plumber');
 
 // PATHS
 // ====================================
 var output = {
   angularApp : "public/app",
-  angularControllers : "public/app/controllers/",
-  angularServices: "public/app/services",
   cssBuild : "public/assets/css"
 };
 
@@ -26,37 +24,28 @@ gulp.task('default', ['nodemon']);
 
 // Main Angluar app
 gulp.task('angularApp', function(){
-  return gulp.src('src/app/*js')
+  return gulp.src('src/app/**/*js')
     .pipe(jshint())
-    .pipe(jshint.reporter())
+    .pipe(notify(function(file){
+      if(file.jshint.success) {
+        //Don't report anything if it's all good
+        return false;
+      }
+      var errors = file.jshint.results.map(function(data){
+        if (data.error) {
+          return "(" + data.error.line + data.error.character + ")" + data.error.reason;
+        }
+      }).join("\n");
+
+      return file.relative + "(" + file.jshint.results.length + " errors)\n" + errors;
+    }))
     .pipe(ngAnnotate())
+    .pipe(concat('angular.app.js'))
     .pipe(rename({
       suffix: '.min'
     }))
     .pipe(uglify())
     .pipe(gulp.dest(output.angularApp));
-});
-
-// Angular controllers
-gulp.task('angularControllers', function(){
-  return gulp.src('src/app/controllers/*.js')
-    .pipe(jshint())
-    .pipe(jshint.reporter())
-    .pipe(ngAnnotate())
-    .pipe(concat('controllers.min.js'))
-    .pipe(uglify())
-    .pipe(gulp.dest(output.angularControllers));
-});
-
-//Angular services
-gulp.task('angularServices', function(){
-  return gulp.src('src/app/services/*.js')
-    .pipe(jshint())
-    .pipe(jshint.reporter())
-    .pipe(ngAnnotate())
-    .pipe(concat('services.min.js'))
-    .pipe(uglify())
-    .pipe(gulp.dest(output.angularServices));
 });
 
 // Angular views
@@ -68,7 +57,7 @@ gulp.task('angularViews', function(){
 // Stylus Task
 gulp.task('stylusBuild', function(){
   return gulp.src('src/assets/styles/main.styl')
-    .pipe(plubmer({errorHandler: notify.onError("Error: <%= error.message %>")}))
+    .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
     .pipe(stylus({
       compress: true
     }))
@@ -78,9 +67,9 @@ gulp.task('stylusBuild', function(){
 
 // Watch all tasks
 gulp.task('watch', function(){
-  gulp.watch('src/app/*.js', ["angularApp"]);
-  gulp.watch('src/app/controllers/*js', ["angularControllers"]);
-  gulp.watch('src/app/services/*js', ["angularServices"]);
+  gulp.watch('src/app/**/*.js', ["angularApp"]);
+  // gulp.watch('src/app/controllers/*js', ["angularControllers"]);
+  // gulp.watch('src/app/services/*js', ["angularServices"]);
   gulp.watch('src/app/views/*html', ["angularViews"]);
   gulp.watch('src/assets/styles/*.styl', ['stylusBuild']);
 });
