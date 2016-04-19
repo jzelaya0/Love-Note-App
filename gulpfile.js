@@ -1,13 +1,16 @@
-var gulp       = require('gulp');
-var uglify     = require('gulp-uglify');
-var ngAnnotate = require('gulp-ng-annotate');
-var concat     = require('gulp-concat');
-var jshint     = require('gulp-jshint');
-var stylus     = require('gulp-stylus');
-var rename     = require('gulp-rename');
-var nodemon    = require('gulp-nodemon');
-var notify     = require('gulp-notify');
-var plumber    = require('gulp-plumber');
+var gulp          = require('gulp');
+var uglify        = require('gulp-uglify');
+var ngAnnotate    = require('gulp-ng-annotate');
+var concat        = require('gulp-concat');
+var jshint        = require('gulp-jshint');
+var stylus        = require('gulp-stylus');
+var rename        = require('gulp-rename');
+var nodemon       = require('gulp-nodemon');
+var notify        = require('gulp-notify');
+var plumber       = require('gulp-plumber');
+var browserSync   = require('browser-sync').create();
+var config        = require('./config');
+
 
 // PATHS
 // ====================================
@@ -62,21 +65,30 @@ gulp.task('stylusBuild', function(){
       compress: true
     }))
     .pipe(rename('main.min.css'))
-    .pipe(gulp.dest(output.cssBuild));
+    .pipe(gulp.dest(output.cssBuild))
+    .pipe(browserSync.reload({
+      stream: true
+    }));
 });
 
+//Browser Sync
+gulp.task('browserSync', function(){
+  browserSync.init(null, {
+    files: ["./public/**/*.*"],
+    proxy: 'localhost:3000'
+  });
+});
+
+
 // Watch all tasks
-gulp.task('watch', function(){
+gulp.task('watch',['browserSync'], function(){
   gulp.watch('src/app/**/*.js', ["angularApp"]);
-  // gulp.watch('src/app/controllers/*js', ["angularControllers"]);
-  // gulp.watch('src/app/services/*js', ["angularServices"]);
   gulp.watch('src/app/views/*html', ["angularViews"]);
   gulp.watch('src/assets/styles/*.styl', ['stylusBuild']);
 });
 
 
 // Start nodemon server
-
 gulp.task('nodemon', function(){
   nodemon({
     script: 'server.js',
