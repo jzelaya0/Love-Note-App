@@ -24,7 +24,7 @@ module.exports = function(app,express){
 
         //If no user with that username was found
         if(!user){
-          res.json({success: false, message: 'Authentication Failed: Username not found.'});
+          res.json({success: false, message: 'Authentication Failed: Email not found.'});
         }else if(user){
           //Check for password match
           var validPassword = user.comparePassword(req.body.password);
