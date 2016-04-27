@@ -8,16 +8,19 @@ angular.module('mainCtrl', [])
     vm.loggedIn = Auth.isLoggedIn();
 
     // Every request checks if a user is logged in (route change)
+    // ==============================
     $rootScope.$on('$routeChangeStart', function(){
       //Checks for valid token
       vm.loggedIn = Auth.isLoggedIn();
+
+      //Get the user data from /api/me on page load
+      Auth.getUser()
+        .then(function(data){
+          vm.user = data;
+        });
     });
 
-    //Get the user data from /api/me on page load
-    Auth.getUser()
-      .success(function(data){
-        vm.user = data;
-      });
+
 
 
 

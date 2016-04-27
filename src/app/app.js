@@ -1,5 +1,6 @@
 angular.module('loveNote', [
   'appRoutes',
+  'authService',
   'mainCtrl'
 ])
 
@@ -8,6 +9,6 @@ angular.module('loveNote', [
 .config(function ($httpProvider){
 
   // attach auth interceptor from auth service to the http requests
-  $httpProvider.interceptor.push('AunthInterceptor');
+  $httpProvider.interceptors.push('AuthInterceptor');
 
 });

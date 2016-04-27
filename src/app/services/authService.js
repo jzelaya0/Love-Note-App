@@ -71,14 +71,14 @@ angular.module('authService', [])
     };
 
     // return auth factory object
-    return authTokenFactory;
+    return authFactory;
 
   })
 
   // ==============================
   // Factory to integrate token in http request
   // ==============================
-  .factory('AunthInterceptor', function($q, $location, AuthToken){
+  .factory('AuthInterceptor', function($q, $location, AuthToken){
     // interceptor object
     var interceptorFactory = {};
 
