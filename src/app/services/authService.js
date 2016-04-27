@@ -38,7 +38,7 @@ angular.module('authService', [])
     var authFactory = {};
 
     // function to log user in
-    authFactory.login = function (username, password) {
+    authFactory.login = function (email, password) {
       // return promise object and its data
       // post to the api's authenticate endpoint
       return $http.post('/api/authenticate', {
