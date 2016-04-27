@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/jzelaya0/Love-Note-App#readme",
   "dependencies": {
+    "angular-bootstrap": "^0.12.2",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.14.2",
     "express": "^4.13.3",
