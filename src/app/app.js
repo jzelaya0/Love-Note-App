@@ -1,7 +1,8 @@
 angular.module('loveNote', [
   'appRoutes',
   'authService',
-  'mainCtrl'
+  'mainCtrl',
+  'ui.bootstrap'
 ])
 
 
